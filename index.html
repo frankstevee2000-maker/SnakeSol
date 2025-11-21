@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SnakeSol Web3 Dashboard</title>
+
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Solana Web3 -->
+  <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+</head>
+<body>
+
+<!-- Background canvases -->
+<canvas id="hexCanvas"></canvas>
+<canvas id="snakeCanvas"></canvas>
+
+<div class="page-container">
+
+<header class="top-bar">
+  <div class="top-left">
+    <span class="welcome-label">Welcome,</span>
+    <span class="welcome-highlight">bruh!</span>
+  </div>
+
+  <div class="top-center">
+    <h1 class="logo-text">
+      SnakeSol
+      <span>WEB3 DASHBOARD</span>
+    </h1>
+  </div>
+
+  <div class="top-right">
+    <button class="login-pill" onclick="openLoginModal()">Login</button>
+  </div>
+</header>
+
+<!-- ================= GRID LAYOUT ================= -->
+<main class="dashboard-grid">
+
+  <!-- ================= LEADERBOARD ================= -->
+  <section class="card card-leaderboard">
+
+    <div class="lb-header">
+      <div class="lb-title">
+        <img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" class="trophy-icon" />
+        Leaderboard
+      </div>
+
+      <div class="live-badge">● Live</div>
+    </div>
+
+    <div class="lb-row">
+      <span>1. Mr-1221z</span>
+      <span class="money">$17,965.42</span>
+    </div>
+    <div class="lb-row">
+      <span>2. Quantum</span>
+      <span class="money">$16,709.24</span>
+    </div>
+    <div class="lb-row">
+      <span>3. Denis237</span>
+      <span class="money">$11,493.66</span>
+    </div>
+
+    <button class="lb-btn">View Full Leaderboard</button>
+  </section>
+
+  <!-- ================= CENTER GAME PANEL ================= -->
+  <section class="card card-center">
+
+    <div class="center-top">
+      <div class="center-icon-box">?</div>
+      <input id="usernameInput" class="center-input" placeholder="Enter username..." />
+      <div class="center-edit-icon">✎</div>
+    </div>
+
+    <div class="center-stake-row">
+      <button class="center-stake-btn">$1</button>
+      <button class="center-stake-btn">$5</button>
+      <button class="center-stake-btn">$20</button>
+    </div>
+
+    <button class="center-join-btn disabled">JOIN GAME</button>
+
+    <div class="center-options-row">
+      <button class="center-mini-btn">How to Play</button>
+      <button class="center-mini-btn">Leaderboard</button>
+    </div>
+
+    <div class="center-stats-row">
+      <div class="stat-column">
+        <div class="stat-value">50</div>
+        <div class="stat-label">Players In Game</div>
+      </div>
+      <div class="stat-column">
+        <div class="stat-value">$832,500</div>
+        <div class="stat-label">Global Winnings</div>
+      </div>
+    </div>
+
+    <div class="affiliate-bar">Affiliate — Earn 20% Commission</div>
+
+  </section>
+
+  <!-- ================= WALLET ================= -->
+  <section class="card card-wallet">
+
+    <div class="wallet-header">
+      <h2 class="wallet-title">Wallet</h2>
+    </div>
+
+    <div class="wallet-balance">
+      <div class="balance-main">$0.00</div>
+      <div class="balance-sub">0.0000 SOL</div>
+    </div>
+
+    <p class="wallet-address">Not Connected</p>
+
+    <div class="wallet-buttons">
+      <button class="wallet-add">Add Funds</button>
+      <button class="wallet-cashout">Cash Out</button>
+    </div>
+
+    <div class="deposit-row">
+      <input id="depositAmount" type="number" min="1" value="1" class="center-input" />
+      <button class="wallet-add">Deposit</button>
+    </div>
+
+  </section>
+
+  <!-- ================= FRIENDS ================= -->
+  <section class="card card-friends">
+    <div class="friends-header">
+      <div class="friends-title">Friends</div>
+      <span class="friends-refresh">Refresh</span>
+    </div>
+
+    <p class="friends-empty">No friends added.</p>
+    <button class="friends-add-btn">Add Friend</button>
+  </section>
+
+  <!-- ================= RECENT WINNERS ================= -->
+  <section class="card card-winners">
+    <div class="winners-header">
+      <div class="winners-title">Recent Winners</div>
+      <div class="winners-live">● Live</div>
+    </div>
+
+    <div class="winner-row">
+      <span>BruhKing</span>
+      <span class="winner-amount">$1,203</span>
+    </div>
+
+    <div class="winner-row">
+      <span>SnakeLord</span>
+      <span class="winner-amount">$985</span>
+    </div>
+
+    <div class="winner-row">
+      <span>SolDuke</span>
+      <span class="winner-amount">$640</span>
+    </div>
+
+  </section>
+
+</main>
+
+<footer class="bottom-bar">
+  <button class="discord-btn">Join Discord</button>
+</footer>
+
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="modal hidden">
+  <div class="modal-content">
+    <button class="close-modal" onclick="closeLoginModal()">×</button>
+
+    <div class="modal-snake">🐍</div>
+    <h2 class="modal-title">Log in or Sign up</h2>
+
+    <form id="emailLoginForm" onsubmit="emailLogin(event)">
+      <input type="email" class="modal-input" placeholder="your@email.com" required />
+      <button class="modal-submit">Submit</button>
+    </form>
+
+    <button class="google-login-btn">Continue with Google</button>
+
+    <p class="modal-footer">
+      By logging in you agree to our
+      <a href="#">Terms</a> & <a href="#">Privacy Policy</a>.
+    </p>
+  </div>
+</div>
+
+<script src="background.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
