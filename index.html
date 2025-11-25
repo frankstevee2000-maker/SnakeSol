@@ -21,7 +21,7 @@
 <header class="top-bar">
   <div class="top-left">
     <span class="welcome-label">Welcome,</span>
-    <span class="welcome-highlight">bruh!</span>
+    <span class="welcome-highlight" id="welcomeUser">bruh!</span>
   </div>
 
   <div class="top-center">
@@ -32,42 +32,29 @@
   </div>
 
   <div class="top-right">
-    <button class="login-pill" onclick="openLoginModal()">Login</button>
+    <button class="login-pill" id="loginBtn">Login</button>
   </div>
 </header>
 
-<!-- ================= GRID LAYOUT ================= -->
 <main class="dashboard-grid">
 
-  <!-- ================= LEADERBOARD ================= -->
+  <!-- LEADERBOARD -->
   <section class="card card-leaderboard">
-
     <div class="lb-header">
       <div class="lb-title">
-        <img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" class="trophy-icon" />
-        Leaderboard
+        ⭐ Leaderboard
       </div>
-
       <div class="live-badge">● Live</div>
     </div>
 
-    <div class="lb-row">
-      <span>1. Mr-1221z</span>
-      <span class="money">$17,965.42</span>
-    </div>
-    <div class="lb-row">
-      <span>2. Quantum</span>
-      <span class="money">$16,709.24</span>
-    </div>
-    <div class="lb-row">
-      <span>3. Denis237</span>
-      <span class="money">$11,493.66</span>
-    </div>
+    <div class="lb-row"><span>1. Mr-1221z</span><span class="money">$17,965.42</span></div>
+    <div class="lb-row"><span>2. Quantum</span><span class="money">$16,709.24</span></div>
+    <div class="lb-row"><span>3. Denis237</span><span class="money">$11,493.66</span></div>
 
     <button class="lb-btn">View Full Leaderboard</button>
   </section>
 
-  <!-- ================= CENTER GAME PANEL ================= -->
+  <!-- GAME PANEL -->
   <section class="card card-center">
 
     <div class="center-top">
@@ -104,7 +91,7 @@
 
   </section>
 
-  <!-- ================= WALLET ================= -->
+  <!-- WALLET -->
   <section class="card card-wallet">
 
     <div class="wallet-header">
@@ -124,13 +111,13 @@
     </div>
 
     <div class="deposit-row">
-      <input id="depositAmount" type="number" min="1" value="1" class="center-input" />
-      <button class="wallet-add">Deposit</button>
+      <input id="depositInput" type="number" min="1" value="1" class="center-input" />
+      <button class="wallet-add" id="depositBtn">Deposit</button>
     </div>
 
   </section>
 
-  <!-- ================= FRIENDS ================= -->
+  <!-- FRIENDS -->
   <section class="card card-friends">
     <div class="friends-header">
       <div class="friends-title">Friends</div>
@@ -141,27 +128,16 @@
     <button class="friends-add-btn">Add Friend</button>
   </section>
 
-  <!-- ================= RECENT WINNERS ================= -->
+  <!-- RECENT WINNERS -->
   <section class="card card-winners">
     <div class="winners-header">
       <div class="winners-title">Recent Winners</div>
       <div class="winners-live">● Live</div>
     </div>
 
-    <div class="winner-row">
-      <span>BruhKing</span>
-      <span class="winner-amount">$1,203</span>
-    </div>
-
-    <div class="winner-row">
-      <span>SnakeLord</span>
-      <span class="winner-amount">$985</span>
-    </div>
-
-    <div class="winner-row">
-      <span>SolDuke</span>
-      <span class="winner-amount">$640</span>
-    </div>
+    <div class="winner-row"><span>BruhKing</span><span class="winner-amount">$1,203</span></div>
+    <div class="winner-row"><span>SnakeLord</span><span class="winner-amount">$985</span></div>
+    <div class="winner-row"><span>SolDuke</span><span class="winner-amount">$640</span></div>
 
   </section>
 
@@ -176,31 +152,28 @@
 <!-- LOGIN MODAL -->
 <div id="loginModal" class="modal hidden">
   <div class="modal-content">
-
     <button class="close-modal">×</button>
 
-    <img src="https://i.ibb.co/7Sg8XJz/snake.png" class="modal-snake-img" />
-
+    <div class="modal-snake">🐍</div>
     <h2 class="modal-title">Log in or Sign up</h2>
 
     <form id="emailLoginForm">
-      <input 
-        type="email" 
-        class="modal-input" 
-        placeholder="your@email.com"
-        required 
-      />
-      <button type="submit" class="modal-submit">Submit</button>
+      <input type="email" class="modal-input" placeholder="your@email.com" required />
+      <button class="modal-submit">Submit</button>
     </form>
 
-    <button class="google-login-btn">
-      Continue with Google
-    </button>
+    <button class="google-login-btn">Continue with Google</button>
 
     <p class="modal-footer">
-      By logging in you agree to our 
-      <a href="#">Terms</a> & <a href="#">Privacy Policy</a>.
+      By logging in you agree to our <a href="#">Terms</a> & <a href="#">Privacy Policy</a>.
     </p>
-
   </div>
 </div>
+
+
+<!-- ORDER MATTERS: background.js MUST load first -->
+<script src="background.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
