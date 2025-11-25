@@ -176,27 +176,31 @@
 <!-- LOGIN MODAL -->
 <div id="loginModal" class="modal hidden">
   <div class="modal-content">
-    <button class="close-modal" onclick="closeLoginModal()">×</button>
 
-    <div class="modal-snake">🐍</div>
+    <button class="close-modal">×</button>
+
+    <img src="https://i.ibb.co/7Sg8XJz/snake.png" class="modal-snake-img" />
+
     <h2 class="modal-title">Log in or Sign up</h2>
 
-    <form id="emailLoginForm" onsubmit="emailLogin(event)">
-      <input type="email" class="modal-input" placeholder="your@email.com" required />
-      <button class="modal-submit">Submit</button>
+    <form id="emailLoginForm">
+      <input 
+        type="email" 
+        class="modal-input" 
+        placeholder="your@email.com"
+        required 
+      />
+      <button type="submit" class="modal-submit">Submit</button>
     </form>
 
-    <button class="google-login-btn">Continue with Google</button>
+    <button class="google-login-btn">
+      Continue with Google
+    </button>
 
     <p class="modal-footer">
-      By logging in you agree to our
+      By logging in you agree to our 
       <a href="#">Terms</a> & <a href="#">Privacy Policy</a>.
     </p>
+
   </div>
 </div>
-
-<script src="background.js"></script>
-<script src="script.js"></script>
-
-</body>
-</html>
