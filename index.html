@@ -7,12 +7,17 @@
 
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Solana Web3 -->
+  <!-- Solana Web3 SDK -->
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+
+  <!-- Make solanaWeb3 global -->
+  <script>
+    window.solanaWeb3 = solanaWeb3;
+  </script>
 </head>
 <body>
 
-<!-- Background canvases -->
+<!-- Background Layers -->
 <canvas id="hexCanvas"></canvas>
 <canvas id="snakeCanvas"></canvas>
 
@@ -41,9 +46,7 @@
   <!-- LEADERBOARD -->
   <section class="card card-leaderboard">
     <div class="lb-header">
-      <div class="lb-title">
-        ⭐ Leaderboard
-      </div>
+      <div class="lb-title">⭐ Leaderboard</div>
       <div class="live-badge">● Live</div>
     </div>
 
@@ -51,12 +54,11 @@
     <div class="lb-row"><span>2. Quantum</span><span class="money">$16,709.24</span></div>
     <div class="lb-row"><span>3. Denis237</span><span class="money">$11,493.66</span></div>
 
-    <button class="lb-btn">View Full Leaderboard</button>
+    <button class="lb-btn" id="fullLeaderboardBtn">View Full Leaderboard</button>
   </section>
 
   <!-- GAME PANEL -->
   <section class="card card-center">
-
     <div class="center-top">
       <div class="center-icon-box">?</div>
       <input id="usernameInput" class="center-input" placeholder="Enter username..." />
@@ -69,41 +71,37 @@
       <button class="center-stake-btn">$20</button>
     </div>
 
-    <button class="center-join-btn disabled">JOIN GAME</button>
+    <button class="center-join-btn disabled" id="joinGameBtn">JOIN GAME</button>
 
     <div class="center-options-row">
-      <button class="center-mini-btn">How to Play</button>
-      <button class="center-mini-btn">Leaderboard</button>
+      <button class="center-mini-btn" id="howToPlayBtn">How to Play</button>
+      <button class="center-mini-btn" id="leaderboardBtn">Leaderboard</button>
     </div>
 
     <div class="center-stats-row">
       <div class="stat-column">
-        <div class="stat-value">50</div>
+        <div class="stat-value" id="playersCount">50</div>
         <div class="stat-label">Players In Game</div>
       </div>
       <div class="stat-column">
-        <div class="stat-value">$832,500</div>
+        <div class="stat-value" id="globalWinnings">$832,500</div>
         <div class="stat-label">Global Winnings</div>
       </div>
     </div>
 
     <div class="affiliate-bar">Affiliate — Earn 20% Commission</div>
-
   </section>
 
   <!-- WALLET -->
   <section class="card card-wallet">
-
-    <div class="wallet-header">
-      <h2 class="wallet-title">Wallet</h2>
-    </div>
+    <h2 class="wallet-title">Wallet</h2>
 
     <div class="wallet-balance">
       <div class="balance-main">$0.00</div>
       <div class="balance-sub">0.0000 SOL</div>
     </div>
 
-    <p class="wallet-address">Not Connected</p>
+    <p class="wallet-address" id="walletStatus">Not Connected</p>
 
     <div class="wallet-buttons">
       <button class="wallet-add">Add Funds</button>
@@ -114,7 +112,6 @@
       <input id="depositInput" type="number" min="1" value="1" class="center-input" />
       <button class="wallet-add" id="depositBtn">Deposit</button>
     </div>
-
   </section>
 
   <!-- FRIENDS -->
@@ -129,7 +126,7 @@
   </section>
 
   <!-- RECENT WINNERS -->
-  <section class="card card-winners">
+  <section class="card card-winners" id="winnersCard">
     <div class="winners-header">
       <div class="winners-title">Recent Winners</div>
       <div class="winners-live">● Live</div>
@@ -138,14 +135,11 @@
     <div class="winner-row"><span>BruhKing</span><span class="winner-amount">$1,203</span></div>
     <div class="winner-row"><span>SnakeLord</span><span class="winner-amount">$985</span></div>
     <div class="winner-row"><span>SolDuke</span><span class="winner-amount">$640</span></div>
-
   </section>
 
 </main>
 
-<footer class="bottom-bar">
-  <button class="discord-btn">Join Discord</button>
-</footer>
+<!-- Removed Discord Button -->
 
 </div>
 
@@ -170,10 +164,9 @@
   </div>
 </div>
 
-
-<!-- ORDER MATTERS: background.js MUST load first -->
+<!-- MUST LOAD THESE IN ORDER -->
 <script src="background.js"></script>
-<script src="script.js"></script>
+<script type="module" src="script.js"></script>
 
 </body>
 </html>
