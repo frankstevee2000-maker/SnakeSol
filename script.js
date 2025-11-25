@@ -34,12 +34,10 @@ closeModalBtn.addEventListener("click", () => {
 
 // CLICK OUTSIDE closes modal
 window.addEventListener("click", (e) => {
-  if (e.target === loginModal) {
-    loginModal.classList.add("hidden");
-  }
+  if (e.target === loginModal) loginModal.classList.add("hidden");
 });
 
-// EMAIL SUBMIT LOGIN
+// EMAIL LOGIN
 emailForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
@@ -48,7 +46,6 @@ emailForm.addEventListener("submit", (e) => {
 
   const username = email.split("@")[0];
 
-  // simulate login delay
   setTimeout(() => {
     loginModal.classList.add("hidden");
 
@@ -57,23 +54,20 @@ emailForm.addEventListener("submit", (e) => {
 
     document.querySelector(".welcome-highlight").textContent = username + "!";
     loginBtn.textContent = "Logout";
-
     document.getElementById("usernameInput").value = username;
 
   }, 500);
 });
 
-// LOGOUT FUNCTION
+// LOGOUT
 function logoutUser() {
   userLoggedIn = false;
   currentUser = null;
 
   document.querySelector(".welcome-highlight").textContent = "bruh!";
   document.getElementById("usernameInput").value = "";
-
   loginBtn.textContent = "Login";
 }
-
 
 /* ============================================================
    GENERIC MODAL GENERATOR
@@ -82,7 +76,6 @@ function logoutUser() {
 function openModal(title, content) {
   const modal = document.createElement("div");
   modal.className = "modal";
-  modal.style.zIndex = 99999;
 
   modal.innerHTML = `
     <div class="modal-content" style="max-width:520px; text-align:left;">
@@ -95,10 +88,8 @@ function openModal(title, content) {
   `;
 
   document.body.appendChild(modal);
-
   modal.querySelector(".close-modal").onclick = () => modal.remove();
 }
-
 
 /* ============================================================
    HOW TO PLAY MODAL
@@ -107,21 +98,19 @@ function openModal(title, content) {
 document.getElementById("howToPlayBtn").onclick = () => {
   openModal("How to Play", `
     🐍 <b>Gameplay Rules</b><br><br>
-    • Move your snake and avoid collisions.<br>
-    • Snake grows as you survive longer.<br>
-    • Longer survival = higher earnings.<br>
-    • Stakes determine potential winnings.<br><br>
-    <b>Simple:</b> Join → Survive → Win SOL.
+    • Avoid collisions.<br>
+    • Grow your snake by surviving longer.<br>
+    • Higher stake = bigger winnings.<br><br>
+    <b>Simple:</b> Join → Survive → Earn SOL.
   `);
 };
-
 
 /* ============================================================
    SMALL LEADERBOARD MODAL
 ============================================================ */
 
 document.getElementById("leaderboardBtn").onclick = () => {
-  openModal("Leaderboard (Top Players)", `
+  openModal("Leaderboard (Top 10 Players)", `
     1. Mr-1221z — $17,965<br>
     2. Quantum — $16,709<br>
     3. Denis237 — $11,493<br>
@@ -135,21 +124,18 @@ document.getElementById("leaderboardBtn").onclick = () => {
   `);
 };
 
-
 /* ============================================================
    FULL LEADERBOARD MODAL
 ============================================================ */
 
 document.getElementById("fullLeaderboardBtn").onclick = () => {
   openModal("Full Leaderboard", `
-    Same leaderboard data shown here.  
-    (Later this will load from Firebase.)
+    Full leaderboard will load dynamically later.
   `);
 };
 
-
 /* ============================================================
-   PHANTOM WALLET + SOL DEPOSIT
+   PHANTOM WALLET CONNECT
 ============================================================ */
 
 async function connectWallet() {
@@ -157,7 +143,7 @@ async function connectWallet() {
     const provider = window.phantom?.solana;
 
     if (!provider) {
-      alert("Phantom wallet not installed.");
+      alert("Please install Phantom Wallet.");
       window.open("https://phantom.app/", "_blank");
       return null;
     }
@@ -166,10 +152,14 @@ async function connectWallet() {
     return resp.publicKey.toString();
 
   } catch (err) {
-    console.error("Wallet connection failed:", err);
+    console.error("Wallet connect error:", err);
     return null;
   }
 }
+
+/* ============================================================
+   SOL DEPOSIT LOGIC (Add Funds + Deposit)
+============================================================ */
 
 async function depositSOL() {
   if (!userLoggedIn) {
@@ -186,7 +176,6 @@ async function depositSOL() {
     }
 
     let amount = parseFloat(document.getElementById("depositInput").value);
-
     if (isNaN(amount) || amount < 1) {
       alert("Minimum deposit is 1 SOL.");
       return;
@@ -194,11 +183,7 @@ async function depositSOL() {
 
     const lamports = amount * 1_000_000_000;
     const publicKey = await connectWallet();
-
-    if (!publicKey) {
-      alert("Wallet connection failed.");
-      return;
-    }
+    if (!publicKey) return;
 
     const connection = new solanaWeb3.Connection("https://api.mainnet-beta.solana.com");
 
@@ -211,25 +196,63 @@ async function depositSOL() {
     );
 
     transaction.feePayer = new solanaWeb3.PublicKey(publicKey);
-    const blockData = await connection.getLatestBlockhash();
-    transaction.recentBlockhash = blockData.blockhash;
+    const { blockhash } = await connection.getLatestBlockhash();
+    transaction.recentBlockhash = blockhash;
 
     const signedTx = await provider.signTransaction(transaction);
     const txSig = await connection.sendRawTransaction(signedTx.serialize());
 
-    alert("Deposit Successful!\nTX: " + txSig);
+    alert("Deposit Sent!\nTX: " + txSig);
 
   } catch (err) {
     console.error("Deposit error:", err);
-    alert("Transaction failed.");
+    alert("Deposit failed.");
   }
 }
 
+// Deposit buttons
 document.getElementById("depositBtn").onclick = depositSOL;
-
+document.querySelector(".wallet-add").onclick = depositSOL;
 
 /* ============================================================
-   AUTO REFRESH WINNERS EVERY 30s
+   CASH OUT REQUEST MODAL (NEW)
+============================================================ */
+
+document.querySelector(".wallet-cashout").onclick = () => {
+  if (!userLoggedIn) {
+    loginModal.classList.remove("hidden");
+    return;
+  }
+
+  openModal("Cash Out Request", `
+      Enter your Solana wallet address to receive your earnings:<br><br>
+
+      <input id="cashoutInput" type="text" placeholder="Your SOL address" 
+      style="width:100%; padding:12px; border-radius:10px;
+      border:1px solid #2c3344; background:#121722; color:white; margin-bottom:14px;">
+
+      <button id="submitCashout"
+      style="width:100%; padding:14px; background:#009cff; border:none;
+      border-radius:12px; color:white; font-weight:700; cursor:pointer;">
+          Submit Request
+      </button>
+  `);
+
+  document.getElementById("submitCashout").onclick = () => {
+    const addr = document.getElementById("cashoutInput").value.trim();
+
+    if (addr.length < 20) {
+      alert("Please enter a valid Solana address.");
+      return;
+    }
+
+    alert("Cashout request sent!\nAdmin will review shortly.");
+    document.querySelector(".modal").remove();
+  };
+};
+
+/* ============================================================
+   AUTO REFRESH WINNERS
 ============================================================ */
 
 function randomMoney(min, max) {
@@ -252,9 +275,8 @@ function refreshWinners() {
 
 setInterval(refreshWinners, 30000);
 
-
 /* ============================================================
-   ANIMATE COUNTERS ON LOAD
+   ANIMATED COUNTERS
 ============================================================ */
 
 function animateCounter(id, endValue, duration = 1500) {
@@ -278,9 +300,8 @@ function animateCounter(id, endValue, duration = 1500) {
 animateCounter("playersCount", 50);
 animateCounter("globalWinnings", 832500);
 
-
 /* ============================================================
-   ENABLE JOIN GAME WHEN USERNAME ENTERED
+   JOIN GAME ENABLE
 ============================================================ */
 
 const joinGameBtn = document.getElementById("joinGameBtn");
