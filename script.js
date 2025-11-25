@@ -130,3 +130,62 @@ function saveDeposit(sender, amount, signature) {
 
 document.getElementById("depositBtn").addEventListener("click", depositSOL);
 
+/* ===============================
+   MODAL LOGIC FIX (Perfect)
+================================ */
+
+const loginModal = document.getElementById("loginModal");
+const loginBtn = document.querySelector(".login-pill");
+const closeModalBtn = document.querySelector(".close-modal");
+const emailForm = document.getElementById("emailLoginForm");
+
+// Start Hidden
+loginModal.classList.add("hidden");
+
+// OPEN modal
+loginBtn.addEventListener("click", () => {
+  loginModal.classList.remove("hidden");
+});
+
+// CLOSE modal
+closeModalBtn.addEventListener("click", () => {
+  loginModal.classList.add("hidden");
+});
+
+// CLICK OUTSIDE closes modal
+window.addEventListener("click", (e) => {
+  if (e.target === loginModal) {
+    loginModal.classList.add("hidden");
+  }
+});
+
+// EMAIL SUBMIT
+emailForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const email = emailForm.querySelector("input").value.trim();
+  if (!email) return;
+
+  console.log("Email submitted:", email);
+
+  // Future: Firebase Authentication here
+
+setTimeout(() => {
+  loginModal.classList.add("hidden");
+
+  // Get the username the user entered
+  const username = email.split("@")[0];
+
+  // Replace Welcome name
+  document.querySelector(".welcome-highlight").textContent = username + "!";
+
+  // Put username inside center input
+  document.getElementById("usernameInput").value = username;
+
+  // Change Login → Logout
+  const loginBtn = document.querySelector(".login-pill");
+  loginBtn.textContent = "Logout";
+  loginBtn.onclick = logoutUser;
+
+}, 800);
+
