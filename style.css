@@ -483,3 +483,456 @@ body {
 .discord-btn:hover {
   filter: brightness(1.15);
 }
+/* ============================================================
+   FIX LOGIN MODAL — RESTORE PRIVY STYLE
+============================================================ */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  width: 360px;
+  background: #0f121a;
+  border-radius: 20px;
+  padding: 30px 24px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  position: relative;
+}
+
+.close-modal {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: #1c2333;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  font-size: 18px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.modal-snake {
+  font-size: 70px;
+  margin-bottom: 10px;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: #ffffff;
+}
+
+/* INPUT */
+.modal-input {
+  width: 100% !important;
+  padding: 14px !important;
+  border-radius: 12px !important;
+  border: 1px solid #2b3345 !important;
+  background: #121722 !important;
+  color: white !important;
+  font-size: 15px !important;
+  margin-bottom: 12px !important;
+}
+
+/* SUBMIT BUTTON */
+.modal-submit {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  background: #009cff;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.google-login-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  background: white;
+  border: none;
+  color: #222;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 6px;
+}
+
+.modal-footer {
+  font-size: 12px;
+  color: #ccc;
+  margin-top: 10px;
+}
+
+.modal-footer a {
+  color: #009cff;
+}
+.modal.hidden {
+  display: none !important;
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: 9999;
+}
+
+.modal-content {
+  width: 350px;
+  background: #0e1118;
+  border-radius: 18px;
+  padding: 30px 25px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0, 156, 255, 0.25);
+  position: relative;
+}
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ccc;
+}
+/* ============================================================
+   FIXED LOGIN MODAL STYLE (Perfect Privy-like UI)
+============================================================ */
+
+.modal.hidden {
+  display: none !important;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  width: 370px;
+  background: #0f141d;
+  border-radius: 20px;
+  padding: 32px 26px 30px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+}
+
+.close-modal {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #1c2333;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.modal-snake-img {
+  width: 80px;
+  margin-bottom: 12px;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #2c3344;
+  background: #121722;
+  color: white;
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+
+.modal-submit {
+  width: 100%;
+  padding: 14px;
+  background: #009cff;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: 0.15s;
+}
+
+.modal-submit:hover {
+  filter: brightness(1.1);
+}
+
+.google-login-btn {
+  width: 100%;
+  padding: 14px;
+  background: white;
+  color: #222;
+  border-radius: 12px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.modal-footer {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.modal-footer a {
+  color: #009cff;
+  text-decoration: none;
+}
+/* ============================================================
+   MOBILE RESPONSIVE FIX — STACK ALL CARDS ON MOBILE
+============================================================ */
+
+@media (max-width: 900px) {
+
+  .dashboard-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .card {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* Center card full width */
+  .card-center {
+    order: 1;
+    padding: 22px;
+  }
+
+  /* Leaderboard next */
+  .card-leaderboard {
+    order: 2;
+  }
+
+  /* Wallet next */
+  .card-wallet {
+    order: 3;
+  }
+
+  /* Friends */
+  .card-friends {
+    order: 4;
+  }
+
+  /* Recent winners */
+  .card-winners {
+    order: 5;
+  }
+
+  /* Buttons & inputs resize */
+  .center-top {
+    grid-template-columns: 50px 1fr 50px;
+  }
+
+  .center-stake-row {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .center-input,
+  .center-stake-btn,
+  .center-join-btn,
+  .center-mini-btn {
+    height: 48px;
+    font-size: 14px;
+  }
+
+  .balance-main {
+    font-size: 22px;
+  }
+
+  .deposit-row {
+    flex-direction: column;
+  }
+
+  .deposit-row input {
+    width: 100%;
+  }
+
+  .deposit-row button {
+    width: 100%;
+  }
+
+  /* Modal fix */
+  .modal-content {
+    width: 92%;
+    max-width: 360px;
+  }
+
+}
+/* ============================================================
+   MOBILE SMALL — Phones (≤480px)
+============================================================ */
+@media (max-width: 480px) {
+
+  .dashboard-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .card {
+    width: 100%;
+    padding: 18px;
+  }
+
+  .logo-text {
+    font-size: 26px;
+  }
+
+  .center-top {
+    grid-template-columns: 45px 1fr 45px;
+  }
+
+  .center-input {
+    height: 48px;
+    font-size: 14px;
+  }
+
+  .center-stake-btn {
+    height: 45px;
+    font-size: 14px;
+  }
+
+  .center-join-btn {
+    height: 52px;
+    font-size: 16px;
+  }
+
+  .deposit-row {
+    flex-direction: column;
+  }
+
+  .deposit-row input,
+  .deposit-row button {
+    width: 100%;
+    height: 48px;
+  }
+
+  .modal-content {
+    width: 92%;
+    max-width: 330px;
+    padding: 24px 18px;
+  }
+}
+/* ============================================================
+   MOBILE MEDIUM — Phones & Small Tablets (≤768px)
+============================================================ */
+@media (max-width: 768px) {
+
+  .dashboard-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .card {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .center-top {
+    grid-template-columns: 50px 1fr 50px;
+  }
+
+  .center-input {
+    height: 50px;
+  }
+
+  .center-stake-btn {
+    height: 50px;
+    font-size: 16px;
+  }
+
+  .center-join-btn {
+    height: 56px;
+    font-size: 18px;
+  }
+
+  .deposit-row {
+    flex-direction: column;
+  }
+
+  .modal-content {
+    width: 85%;
+    max-width: 360px;
+  }
+}
+/* ============================================================
+   TABLET — iPad / Medium Screens (≤1024px)
+============================================================ */
+@media (max-width: 1024px) {
+
+  .dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 20px;
+  }
+
+  /* Center panel full width */
+  .card-center {
+    grid-column: 1 / 3;
+  }
+
+  /* Wallet moves below center */
+  .card-wallet {
+    grid-column: 1 / 2;
+  }
+
+  /* Winners beside wallet */
+  .card-winners {
+    grid-column: 2 / 3;
+  }
+
+  /* Friends goes full width below */
+  .card-friends {
+    grid-column: 1 / 3;
+  }
+
+  .center-join-btn {
+    height: 58px;
+  }
+
+  .modal-content {
+    max-width: 380px;
+  }
+}
