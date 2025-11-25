@@ -1,29 +1,155 @@
 /* ============================================================
-   WEB3 + FIREBASE REAL DEPOSIT LOGIC
+   GLOBAL APP STATE
 ============================================================ */
 
-// 🔥 CONFIG: BUYER SOL ADDRESS (where all deposits must go)
+let userLoggedIn = false;
+let currentUser = null;
+
 const RECEIVER_ADDRESS = "HTUduW42xDZNiVf9NejQSCms9YqCDHgD1sdfeUEvtrHo";
 
-// 🔥 Firebase Setup
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getDatabase, ref, set, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+/* ============================================================
+   LOGIN MODAL LOGIC
+============================================================ */
 
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_DOMAIN",
-  databaseURL: "YOUR_DB_URL",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_BUCKET",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
+const loginModal = document.getElementById("loginModal");
+const loginBtn = document.getElementById("loginBtn");
+const closeModalBtn = document.querySelector(".close-modal");
+const emailForm = document.getElementById("emailLoginForm");
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+loginModal.classList.add("hidden");
+
+// OPEN modal
+loginBtn.addEventListener("click", () => {
+  if (userLoggedIn) {
+    logoutUser();
+    return;
+  }
+  loginModal.classList.remove("hidden");
+});
+
+// CLOSE modal
+closeModalBtn.addEventListener("click", () => {
+  loginModal.classList.add("hidden");
+});
+
+// CLICK OUTSIDE closes modal
+window.addEventListener("click", (e) => {
+  if (e.target === loginModal) {
+    loginModal.classList.add("hidden");
+  }
+});
+
+// EMAIL SUBMIT LOGIN
+emailForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const email = emailForm.querySelector("input").value.trim();
+  if (!email) return;
+
+  const username = email.split("@")[0];
+
+  // simulate login delay
+  setTimeout(() => {
+    loginModal.classList.add("hidden");
+
+    userLoggedIn = true;
+    currentUser = username;
+
+    document.querySelector(".welcome-highlight").textContent = username + "!";
+    loginBtn.textContent = "Logout";
+
+    document.getElementById("usernameInput").value = username;
+
+  }, 500);
+});
+
+// LOGOUT FUNCTION
+function logoutUser() {
+  userLoggedIn = false;
+  currentUser = null;
+
+  document.querySelector(".welcome-highlight").textContent = "bruh!";
+  document.getElementById("usernameInput").value = "";
+
+  loginBtn.textContent = "Login";
+}
+
 
 /* ============================================================
-   PHANTOM WALLET DETECTION
+   GENERIC MODAL GENERATOR
+============================================================ */
+
+function openModal(title, content) {
+  const modal = document.createElement("div");
+  modal.className = "modal";
+  modal.style.zIndex = 99999;
+
+  modal.innerHTML = `
+    <div class="modal-content" style="max-width:520px; text-align:left;">
+      <button class="close-modal">×</button>
+      <h2 style="margin-bottom:12px;">${title}</h2>
+      <div style="font-size:15px; line-height:1.5; color:#dbe8ff;">
+        ${content}
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  modal.querySelector(".close-modal").onclick = () => modal.remove();
+}
+
+
+/* ============================================================
+   HOW TO PLAY MODAL
+============================================================ */
+
+document.getElementById("howToPlayBtn").onclick = () => {
+  openModal("How to Play", `
+    🐍 <b>Gameplay Rules</b><br><br>
+    • Move your snake and avoid collisions.<br>
+    • Snake grows as you survive longer.<br>
+    • Longer survival = higher earnings.<br>
+    • Stakes determine potential winnings.<br><br>
+    <b>Simple:</b> Join → Survive → Win SOL.
+  `);
+};
+
+
+/* ============================================================
+   SMALL LEADERBOARD MODAL
+============================================================ */
+
+document.getElementById("leaderboardBtn").onclick = () => {
+  openModal("Leaderboard (Top Players)", `
+    1. Mr-1221z — $17,965<br>
+    2. Quantum — $16,709<br>
+    3. Denis237 — $11,493<br>
+    4. SnakeLord — $9,221<br>
+    5. SolDuke — $7,884<br>
+    6. MetaDash — $6,945<br>
+    7. SolStorm — $6,440<br>
+    8. PixelSnake — $5,982<br>
+    9. LightSol — $5,321<br>
+    10. HexMaster — $4,992<br>
+  `);
+};
+
+
+/* ============================================================
+   FULL LEADERBOARD MODAL
+============================================================ */
+
+document.getElementById("fullLeaderboardBtn").onclick = () => {
+  openModal("Full Leaderboard", `
+    Same leaderboard data shown here.  
+    (Later this will load from Firebase.)
+  `);
+};
+
+
+/* ============================================================
+   PHANTOM WALLET + SOL DEPOSIT
 ============================================================ */
 
 async function connectWallet() {
@@ -45,33 +171,30 @@ async function connectWallet() {
   }
 }
 
-/* ============================================================
-   REAL SOLANA DEPOSIT FUNCTION
-============================================================ */
-
 async function depositSOL() {
+  if (!userLoggedIn) {
+    loginModal.classList.remove("hidden");
+    return;
+  }
+
   try {
     const provider = window.phantom?.solana;
 
     if (!provider) {
-      alert("Phantom wallet is required.");
+      alert("Phantom wallet required.");
       return;
     }
 
-    // Get Amount
-    const amountInput = document.getElementById("depositInput");
-    let amount = parseFloat(amountInput.value);
+    let amount = parseFloat(document.getElementById("depositInput").value);
 
     if (isNaN(amount) || amount < 1) {
       alert("Minimum deposit is 1 SOL.");
       return;
     }
 
-    // Convert to lamports
     const lamports = amount * 1_000_000_000;
-
-    // Ensure wallet connected
     const publicKey = await connectWallet();
+
     if (!publicKey) {
       alert("Wallet connection failed.");
       return;
@@ -83,24 +206,18 @@ async function depositSOL() {
       solanaWeb3.SystemProgram.transfer({
         fromPubkey: new solanaWeb3.PublicKey(publicKey),
         toPubkey: new solanaWeb3.PublicKey(RECEIVER_ADDRESS),
-        lamports: lamports,
+        lamports: lamports
       })
     );
 
     transaction.feePayer = new solanaWeb3.PublicKey(publicKey);
-    let blockhashObj = await connection.getLatestBlockhash();
-    transaction.recentBlockhash = blockhashObj.blockhash;
+    const blockData = await connection.getLatestBlockhash();
+    transaction.recentBlockhash = blockData.blockhash;
 
-    // SIGN & SEND
     const signedTx = await provider.signTransaction(transaction);
-    const txSignature = await connection.sendRawTransaction(signedTx.serialize());
+    const txSig = await connection.sendRawTransaction(signedTx.serialize());
 
-    console.log("TX Sent:", txSignature);
-
-    // Save to Firebase DB
-    saveDeposit(publicKey, amount, txSignature);
-
-    alert(`Deposit successful! TX: ${txSignature}`);
+    alert("Deposit Successful!\nTX: " + txSig);
 
   } catch (err) {
     console.error("Deposit error:", err);
@@ -108,84 +225,71 @@ async function depositSOL() {
   }
 }
 
+document.getElementById("depositBtn").onclick = depositSOL;
+
+
 /* ============================================================
-   SAVE DEPOSIT TO FIREBASE
+   AUTO REFRESH WINNERS EVERY 30s
 ============================================================ */
 
-function saveDeposit(sender, amount, signature) {
-  const depositRef = push(ref(db, "deposits/"));
-
-  set(depositRef, {
-    sender: sender,
-    amount: amount,
-    signature: signature,
-    status: "pending",
-    timestamp: Date.now()
-  });
+function randomMoney(min, max) {
+  return "$" + (Math.floor(Math.random() * (max - min)) + min).toLocaleString();
 }
 
+function refreshWinners() {
+  const card = document.getElementById("winnersCard");
+
+  card.innerHTML = `
+    <div class="winners-header">
+      <div class="winners-title">Recent Winners</div>
+      <div class="winners-live">● Live</div>
+    </div>
+    <div class="winner-row"><span>BruhKing</span><span class="winner-amount">${randomMoney(900,1400)}</span></div>
+    <div class="winner-row"><span>SnakeLord</span><span class="winner-amount">${randomMoney(700,1100)}</span></div>
+    <div class="winner-row"><span>SolDuke</span><span class="winner-amount">${randomMoney(500,900)}</span></div>
+  `;
+}
+
+setInterval(refreshWinners, 30000);
+
+
 /* ============================================================
-   BUTTON WIRING
+   ANIMATE COUNTERS ON LOAD
 ============================================================ */
 
-document.getElementById("depositBtn").addEventListener("click", depositSOL);
+function animateCounter(id, endValue, duration = 1500) {
+  const el = document.getElementById(id);
+  let start = 0;
+  const stepTime = 10;
+  const increment = endValue / (duration / stepTime);
 
-/* ===============================
-   MODAL LOGIC FIX (Perfect)
-================================ */
+  const timer = setInterval(() => {
+    start += increment;
 
-const loginModal = document.getElementById("loginModal");
-const loginBtn = document.querySelector(".login-pill");
-const closeModalBtn = document.querySelector(".close-modal");
-const emailForm = document.getElementById("emailLoginForm");
+    if (start >= endValue) {
+      start = endValue;
+      clearInterval(timer);
+    }
 
-// Start Hidden
-loginModal.classList.add("hidden");
+    el.textContent = Math.floor(start).toLocaleString();
+  }, stepTime);
+}
 
-// OPEN modal
-loginBtn.addEventListener("click", () => {
-  loginModal.classList.remove("hidden");
-});
+animateCounter("playersCount", 50);
+animateCounter("globalWinnings", 832500);
 
-// CLOSE modal
-closeModalBtn.addEventListener("click", () => {
-  loginModal.classList.add("hidden");
-});
 
-// CLICK OUTSIDE closes modal
-window.addEventListener("click", (e) => {
-  if (e.target === loginModal) {
-    loginModal.classList.add("hidden");
+/* ============================================================
+   ENABLE JOIN GAME WHEN USERNAME ENTERED
+============================================================ */
+
+const joinGameBtn = document.getElementById("joinGameBtn");
+const usernameInput = document.getElementById("usernameInput");
+
+usernameInput.addEventListener("input", () => {
+  if (usernameInput.value.trim().length > 0) {
+    joinGameBtn.classList.remove("disabled");
+  } else {
+    joinGameBtn.classList.add("disabled");
   }
 });
-
-// EMAIL SUBMIT
-emailForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  const email = emailForm.querySelector("input").value.trim();
-  if (!email) return;
-
-  console.log("Email submitted:", email);
-
-  // Future: Firebase Authentication here
-
-setTimeout(() => {
-  loginModal.classList.add("hidden");
-
-  // Get the username the user entered
-  const username = email.split("@")[0];
-
-  // Replace Welcome name
-  document.querySelector(".welcome-highlight").textContent = username + "!";
-
-  // Put username inside center input
-  document.getElementById("usernameInput").value = username;
-
-  // Change Login → Logout
-  const loginBtn = document.querySelector(".login-pill");
-  loginBtn.textContent = "Logout";
-  loginBtn.onclick = logoutUser;
-
-}, 800);
-
